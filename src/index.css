@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark theme variables */
+:root {
+  --bg: #0b1220;
+  --card: #020305;
+  --muted: #9aa4b2;
+  --accent: #3b82f6;
+}
+
+html.dark body {
+  background: linear-gradient(180deg, #071021e5 0% 100%);
+  color: #dbe7ff;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+.card { background: var(--card); padding: 1rem; border-radius: 0.75rem; box-shadow: 0 6px 18px rgba(2,6,23,0.6); }
+.btn { @apply inline-block px-3 py-1 rounded text-white; }
+.input { @apply w-full p-2 rounded bg-transparent border border-zinc-700 placeholder:text-zinc-500; color: #dbe7ff }
+.small { color: var(--muted); font-size: .9rem }
+.nav-link { @apply px-3 py-2 rounded hover:bg-zinc-800 }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: .6rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
