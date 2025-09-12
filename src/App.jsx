@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -15,20 +22,12 @@ function Private({ children }) {
 }
 
 function Navbar() {
-  const [logged, setLogged] = useState(isLogged());
+  const logged = isLogged();
   const navigate = useNavigate();
-
-  // Watch localStorage changes (login/logout) and update state
-  useEffect(() => {
-    const checkAuth = () => setLogged(isLogged());
-
-    window.addEventListener("storage", checkAuth); // if localStorage changes in another tab
-    return () => window.removeEventListener("storage", checkAuth);
-  }, []);
 
   const handleLogout = () => {
     logout();
-    setLogged(false);
+    window.dispatchEvent(new Event("authChange")); // 🔥 notify app
     navigate("/login");
   };
 
@@ -80,9 +79,17 @@ function Navbar() {
 }
 
 export default function App() {
+  const [authVersion, setAuthVersion] = useState(0);
+
+  useEffect(() => {
+    const handle = () => setAuthVersion((v) => v + 1);
+    window.addEventListener("authChange", handle);
+    return () => window.removeEventListener("authChange", handle);
+  }, []);
+
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar key={authVersion} /> {/* 🔥 remounts when auth changes */}
       <main className="container">
         <Routes>
           <Route path="/" element={<Home />} />
